@@ -25,6 +25,12 @@ func RunCLI() error {
 			return err
 		}
 		fmt.Println("Task added successfully")
+	case "list":
+		status := ""
+		if len(args) > 2 {
+			status = args[2]
+		}
+		ListTasks(status)
 	default:
 		return errors.New("unknown command")
 	}

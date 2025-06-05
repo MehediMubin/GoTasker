@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type Task struct {
 	ID          int    		`json:"id"`
@@ -28,4 +31,12 @@ func AddTask(description string) error {
 
 	tasks = append(tasks, newTask)
 	return SaveTasks(tasks)
+}
+
+func ListTasks(status string) {
+	for _, task := range tasks {
+		if status == "" || task.Status == status {
+			fmt.Printf("%d - %s [%s]\n", task.ID, task.Description, task.Status)
+		}
+	}
 }
