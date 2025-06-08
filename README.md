@@ -10,14 +10,14 @@ A simple command-line interface (CLI) tool to track and manage your daily tasks.
 
 ## 📌 Features
 
-- ✅ Add new tasks
-- ✏️ Update existing tasks
-- 🗑️ Delete tasks
-- 🚧 Mark tasks as *in progress*
-- ✔️ Mark tasks as *done*
-- 📄 List all tasks
-- 🎯 List tasks by status (`todo`, `in-progress`, `done`)
-- 🗂️ Stores task data in a local JSON file
+-  ✅ Add new tasks
+-  ✏️ Update existing tasks
+-  🗑️ Delete tasks
+-  🚧 Mark tasks as _in progress_
+-  ✔️ Mark tasks as _done_
+-  📄 List all tasks
+-  🎯 List tasks by status (`todo`, `in-progress`, `done`)
+-  🗂️ Stores task data in a local JSON file
 
 ---
 
@@ -30,15 +30,16 @@ git clone https://github.com/MehediMubin/GoTasker.git
 cd GoTasker
 ```
 
-### 2. Run the Program
+### 2. Build and Install Globally (following is for linux based systems)
 
 Make sure you have [Go](https://go.dev/dl/) installed on your system.
 
-To run the CLI program:
-
 ```bash
-go run main.go <command> [arguments...]
+go build -o task-cli
+sudo mv task-cli /usr/local/bin
 ```
+
+Now you can run the app globally using just `task-cli`.
 
 ---
 
@@ -47,46 +48,47 @@ go run main.go <command> [arguments...]
 ### ➕ Add a New Task
 
 ```bash
-go run main.go add "Buy groceries"
+task-cli add "Buy groceries"
 ```
+
 **Output:** `Task added successfully (ID: 1)`
 
 ### ✏️ Update an Existing Task
 
 ```bash
-go run main.go update 1 "Buy groceries and cook dinner"
+task-cli update 1 "Buy groceries and cook dinner"
 ```
 
 ### 🗑️ Delete a Task
 
 ```bash
-go run main.go delete 1
+task-cli delete 1
 ```
 
 ### 🚧 Mark a Task as In Progress
 
 ```bash
-go run main.go mark-in-progress 2
+task-cli mark-in-progress 2
 ```
 
 ### ✔️ Mark a Task as Done
 
 ```bash
-go run main.go mark-done 2
+task-cli mark-done 2
 ```
 
 ### 📄 List All Tasks
 
 ```bash
-go run main.go list
+task-cli list
 ```
 
 ### 🎯 List Tasks by Status
 
 ```bash
-go run main.go list todo
-go run main.go list in-progress
-go run main.go list done
+task-cli list todo
+task-cli list in-progress
+task-cli list done
 ```
 
 ---
@@ -97,11 +99,11 @@ Each task is stored in the `tasks.json` file with the following properties:
 
 ```json
 {
-  "id": 1,
-  "description": "Example task",
-  "status": "todo",
-  "createdAt": "2025-06-08T10:00:00Z",
-  "updatedAt": "2025-06-08T12:30:00Z"
+   "id": 1,
+   "description": "Example task",
+   "status": "todo",
+   "createdAt": "2025-06-08T10:00:00Z",
+   "updatedAt": "2025-06-08T12:30:00Z"
 }
 ```
 
@@ -109,10 +111,10 @@ Each task is stored in the `tasks.json` file with the following properties:
 
 ## 📁 Storage Details
 
-- All tasks are stored in a local file named `tasks.json` in the current working directory.
-- If the file does not exist, it will be created automatically when you add your first task.
-- The app uses Go's native `os` and `encoding/json` packages to read/write the file.
-- No external libraries or dependencies required.
+-  All tasks are stored in a local file named `tasks.json` in the current working directory.
+-  If the file does not exist, it will be created automatically when you add your first task.
+-  The app uses Go's native `os` and `encoding/json` packages to read/write the file.
+-  No external libraries or dependencies required.
 
 ---
 
@@ -120,17 +122,17 @@ Each task is stored in the `tasks.json` file with the following properties:
 
 The app gracefully handles:
 
-- Invalid command usage (e.g., missing arguments)
-- Non-existent task IDs during update, delete, or mark
-- Corrupted or unreadable `tasks.json` file
+-  Invalid command usage (e.g., missing arguments)
+-  Non-existent task IDs during update, delete, or mark
+-  Corrupted or unreadable `tasks.json` file
 
 ---
 
 ## 🛠 Tech Stack
 
-- Language: [Go (Golang)](https://go.dev/)
-- File Format: JSON
-- No third-party packages
+-  Language: [Go (Golang)](https://go.dev/)
+-  File Format: JSON
+-  No third-party packages
 
 ---
 
@@ -138,10 +140,10 @@ The app gracefully handles:
 
 This project is a simple but effective way to get comfortable with:
 
-- Command-line interfaces
-- File handling
-- JSON serialization
-- Basic structuring in Go
+-  Command-line interfaces
+-  File handling
+-  JSON serialization
+-  Basic structuring in Go
 
 ---
 
