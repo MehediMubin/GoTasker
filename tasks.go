@@ -33,7 +33,7 @@ func AddTask(description string) error {
 	return SaveTasks(tasks)
 }
 
-func ListTasks(status string) {
+func ShowTasks(status string) {
 	for _, task := range tasks {
 		if status == "" || task.Status == status {
 			fmt.Printf("%d - %s [%s]\n", task.ID, task.Description, task.Status)
