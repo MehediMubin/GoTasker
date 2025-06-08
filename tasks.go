@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"time"
 )
@@ -29,7 +30,7 @@ func AddTask(description string) error {
 		UpdatedAt: time.Now(),
 	}
 
-	tasks = append(tasks, newTask)
+	tasks = append(tasks, newTask) 
 	return SaveTasks(tasks)
 }
 
@@ -39,4 +40,15 @@ func ShowTasks(status string) {
 			fmt.Printf("%d - %s [%s]\n", task.ID, task.Description, task.Status)
 		}
 	}
+}
+
+func UpdateTask(id int, newDescription string) error {
+	for i, task := range tasks {
+		if task.ID == id {
+			tasks[i].Description = newDescription
+			tasks[i].UpdatedAt = time.Now()
+			return SaveTasks(tasks)
+		}
+	}
+	return errors.New("task not found")
 }

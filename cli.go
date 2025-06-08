@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -31,6 +32,24 @@ func RunCLI() error {
 			status = args[2]
 		}
 		ShowTasks(status)
+	
+	case "update":
+		if len(args) < 4 {
+			return errors.New("usage: update <id> <new description>")
+		}
+
+		id, err := strconv.Atoi(args[2])
+		if err != nil {
+			return errors.New("invalid task ID")
+		}
+
+		description := strings.Join(args[3:], " ")
+		err = UpdateTask(id, description)
+		if err != nil {
+			return err
+		}
+		fmt.Println("Task updated successfully")
+
 	default:
 		return errors.New("unknown command")
 	}
