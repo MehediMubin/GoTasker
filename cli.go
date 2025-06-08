@@ -20,12 +20,14 @@ func RunCLI() error {
 		if len(args) < 3 {
 			return errors.New("please provide a task description")
 		}
+		
 		description := strings.Join(args[2:], " ")
 		err := AddTask(description)
 		if err != nil {
 			return err
 		}
 		fmt.Println("Task added successfully")
+
 	case "show":
 		status := ""
 		if len(args) > 2 {
@@ -65,6 +67,38 @@ func RunCLI() error {
 			return err
 		}
 		fmt.Println("Task deleted successfully")
+
+	case "mark-in-progress":
+		if len(args) < 3 {
+			return errors.New("usage: mark-in-progress <id>")
+		}
+
+		id, err := strconv.Atoi(args[2])
+		if err != nil {
+			return errors.New("invalid task ID")
+		}
+
+		err = MarkStatus(id, "in-progress")
+		if err != nil {
+			return err
+		}
+		fmt.Println("Status updated successfully")
+
+	case "mark-done":
+		if len(args) < 3 {
+			return errors.New("usage: done <id>")
+		}
+
+		id, err := strconv.Atoi(args[2])
+		if err != nil {
+			return errors.New("invalid task id")
+		}
+
+		err = MarkStatus(id, "done")
+		if err != nil {
+			return err
+		}
+		fmt.Println("Status updated successfully")
 
 	default:
 		return errors.New("unknown command")

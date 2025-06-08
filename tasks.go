@@ -63,3 +63,14 @@ func DeleteTask(id int) error {
 	}
 	return errors.New("task not found")
 }
+
+func MarkStatus(id int, status string) error {
+	for i, task := range tasks {
+		if task.ID == id {
+			tasks[i].Status = status
+			tasks[i].UpdatedAt = time.Now()
+			return SaveTasks(tasks)
+		}
+	}
+	return errors.New("task not found")
+}
