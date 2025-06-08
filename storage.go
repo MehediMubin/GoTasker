@@ -10,10 +10,8 @@ const taskFile = "tasks.json"
 
 func LoadTasks() ([]Task, error) {
 	_, err := os.Stat(taskFile)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return []Task{}, nil
-		}
+	if err != nil && os.IsNotExist(err) {
+		return []Task{}, nil
 	}
 
 	data, err := os.ReadFile(taskFile)
