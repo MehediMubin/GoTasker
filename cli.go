@@ -28,12 +28,15 @@ func RunCLI() error {
 		}
 		fmt.Println("Task added successfully")
 
-	case "show":
+	case "list":
 		status := ""
 		if len(args) > 2 {
 			status = args[2]
 		}
-		ShowTasks(status)
+		err := ListTasks(status)
+		if err != nil {
+			return err
+		}
 	
 	case "update":
 		if len(args) < 4 {
@@ -86,7 +89,7 @@ func RunCLI() error {
 
 	case "mark-done":
 		if len(args) < 3 {
-			return errors.New("usage: done <id>")
+			return errors.New("usage: mark-done <id>")
 		}
 
 		id, err := strconv.Atoi(args[2])

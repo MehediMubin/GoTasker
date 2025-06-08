@@ -35,11 +35,18 @@ func AddTask(description string) error {
 	return SaveTasks(tasks)
 }
 
-func ShowTasks(status string) {
+func ListTasks(status string) error {
+	found := false
 	for _, task := range tasks {
 		if status == "" || task.Status == status {
 			fmt.Printf("%d - %s [%s]\n", task.ID, task.Description, task.Status)
+			found = true
 		}
+	}
+	if found {
+		return nil
+	} else {
+		return errors.New("no task available with this status")
 	}
 }
 
