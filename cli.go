@@ -50,6 +50,22 @@ func RunCLI() error {
 		}
 		fmt.Println("Task updated successfully")
 
+	case "delete":
+		if len(args) < 3 {
+			return errors.New("usage: delete <id>")
+		}
+
+		id, err := strconv.Atoi(args[2])
+		if err != nil {
+			return errors.New("invalid task ID")
+		}
+
+		err = DeleteTask(id)
+		if err != nil {
+			return err
+		}
+		fmt.Println("Task deleted successfully")
+
 	default:
 		return errors.New("unknown command")
 	}

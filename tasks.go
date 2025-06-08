@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"time"
 )
 
@@ -47,6 +48,16 @@ func UpdateTask(id int, newDescription string) error {
 		if task.ID == id {
 			tasks[i].Description = newDescription
 			tasks[i].UpdatedAt = time.Now()
+			return SaveTasks(tasks)
+		}
+	}
+	return errors.New("task not found")
+}
+
+func DeleteTask(id int) error {
+	for i, task := range tasks {
+		if task.ID == id {
+			tasks = slices.Delete(tasks, i, i + 1)
 			return SaveTasks(tasks)
 		}
 	}
