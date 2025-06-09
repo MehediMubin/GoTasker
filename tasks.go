@@ -11,6 +11,7 @@ type Task struct {
 	ID          int    		`json:"id"`
 	Description string 		`json:"description"`
 	Status      string 		`json:"status"`
+	Priority    string    `json:"priority"`
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt 	time.Time `json:"updatedAt"`
 }
@@ -27,6 +28,7 @@ func AddTask(description string) error {
 		ID: id,
 		Description: description,
 		Status: "todo",
+		Priority: "low",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
@@ -39,14 +41,14 @@ func ListTasks(status string) error {
 	found := false
 	for _, task := range tasks {
 		if status == "" || task.Status == status {
-			fmt.Printf("%d - %s [%s]\n", task.ID, task.Description, task.Status)
+			fmt.Printf("%d - %s [%s] [%s]\n", task.ID, task.Description, task.Status, task.Priority)
 			found = true
 		}
 	}
 	if found {
 		return nil
 	} else {
-		return errors.New("no task available with this status")
+		return errors.New("no task available with the status: " + status)
 	}
 }
 
@@ -79,5 +81,24 @@ func MarkStatus(id int, status string) error {
 			return SaveTasks(tasks)
 		}
 	}
+	return errors.New("task not found")
+}
+
+func Reset() error {
+	for i := range tasks {
+		tasks[i].Status = "todo"
+	}
+	return SaveTasks(tasks)
+}
+
+func SetPriority(id int, newPriority string) error {
+	for i, task := range tasks {
+		if task.ID == id {
+			tasks[i].Priority = newPriority
+			tasks[i].UpdatedAt = time.Now()
+			return SaveTasks(tasks)
+		}
+	}
+
 	return errors.New("task not found")
 }

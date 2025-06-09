@@ -103,6 +103,64 @@ func RunCLI() error {
 		}
 		fmt.Println("Status updated successfully")
 
+	case "reset":
+		if len(args) < 2 {
+			return errors.New("usage: reset")
+		}
+		err := Reset()
+		if err != nil {
+			return err
+		}
+		fmt.Println("Task resetted successfully")
+
+	case "priority-high":
+		if len(args) < 3 {
+			return errors.New("usage: priority-high <id>")
+		}
+
+		id, err := strconv.Atoi(args[2])
+		if err != nil {
+			return errors.New("invalid task ID")
+		}
+
+		err = SetPriority(id, "high")
+		if err != nil {
+			return err
+		}
+		fmt.Println("Task priority set successfully")
+
+	case "priority-mid":
+		if len(args) < 3 {
+			return errors.New("usage: priority-mid <id>")
+		}
+
+		id, err := strconv.Atoi(args[2])
+		if err != nil {
+			return errors.New("invalid task ID")
+		}
+
+		err = SetPriority(id, "medium")
+		if err != nil {
+			return err
+		}
+		fmt.Println("Task priority set successfully")
+
+	case "priority-low":
+		if len(args) < 3 {
+			return errors.New("usage: priority-low <id>")
+		}
+
+		id, err := strconv.Atoi(args[2])
+		if err != nil {
+			return errors.New("invalid task ID")
+		}
+
+		err = SetPriority(id, "low")
+		if err != nil {
+			return err
+		}
+		fmt.Println("Task priority set successfully")
+
 	default:
 		return errors.New("unknown command")
 	}
