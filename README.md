@@ -159,7 +159,3 @@ Pull requests are welcome! If you find a bug or want to improve something, feel 
 ### 🔗 Official Project Page
 
 > 📌 [https://roadmap.sh/projects/task-tracker](https://roadmap.sh/projects/task-tracker)
-
----
-
-**Happy coding!**
