@@ -1,11 +1,8 @@
-# 📝 Task Tracker CLI
+# 📝 GoTasker
 
 A simple command-line interface (CLI) tool to track and manage your daily tasks. This tool allows you to add, update, delete, and organize tasks by their current status — such as **todo**, **in-progress**, and **done** — using a local JSON file for persistent storage.
 
 > 🚀 Project by [Md. Mehedi Hasan](https://github.com/your-username)
-
-🔗 **Project URL on roadmap.sh**: [https://roadmap.sh/projects/task-tracker](https://roadmap.sh/projects/task-tracker)
-
 ---
 
 ## 📌 Features
