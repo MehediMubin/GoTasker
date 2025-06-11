@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"sort"
 	"time"
 )
 
@@ -38,6 +39,15 @@ func AddTask(description string) error {
 }
 
 func ListTasks(status string) error {
+	priorityOrder := map[string]int{
+		"high": 0,
+		"medium": 1,
+		"low": 2,
+	}
+
+	sort.Slice(tasks, func(i, j int) bool {
+		return priorityOrder[tasks[i].Priority] < priorityOrder[tasks[j].Priority]
+	})
 	found := false
 	for _, task := range tasks {
 		if status == "" || task.Status == status {
