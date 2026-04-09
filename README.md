@@ -87,7 +87,7 @@ task-cli mark-done 2
 task-cli list
 ```
 
-By default, `task-cli list` shows every task except those marked `done`.
+By default, `task-cli list` shows every task except those marked `done` in a spaced, table-style layout.
 
 ### 🎯 List Tasks by Status
 
