@@ -128,8 +128,8 @@ Each task is stored in the `tasks.json` file with the following properties:
 
 ## 📁 Storage Details
 
-- All tasks are stored in a local file named `tasks.json` in the current working directory
-- If the file does not exist, it will be created automatically when you add your first task
+- All tasks are stored in a fixed per-user file at `~/.config/task-cli/tasks.json` on Linux
+- The app creates the directory automatically on first write
 - The app uses Go's native `os` and `encoding/json` packages to read/write the file
 - No external libraries or dependencies required
 
