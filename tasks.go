@@ -71,24 +71,53 @@ func ListTasks(status string) error {
 		"low":    2,
 	}
 
-	sort.Slice(tasks, func(i, j int) bool {
-		return priorityOrder[tasks[i].Priority] < priorityOrder[tasks[j].Priority]
-	})
-	found := false
+	visibleTasks := make([]Task, 0, len(tasks))
 	for _, task := range tasks {
 		if (status == "" && task.Status != "done") || task.Status == status {
-			fmt.Printf("%d - %s [%s] [%s]\n", task.ID, task.Description, task.Status, task.Priority)
-			found = true
+			visibleTasks = append(visibleTasks, task)
 		}
 	}
-	if found {
-		return nil
-	} else {
+
+	if len(visibleTasks) == 0 {
 		if status == "" {
 			return errors.New("no task available")
 		}
 		return errors.New("no task available with the status: " + status)
 	}
+
+	sort.Slice(visibleTasks, func(i, j int) bool {
+		return priorityOrder[visibleTasks[i].Priority] < priorityOrder[visibleTasks[j].Priority]
+	})
+
+	maxDescriptionWidth := len("Description")
+	for _, task := range visibleTasks {
+		if len(task.Description) > maxDescriptionWidth {
+			maxDescriptionWidth = len(task.Description)
+		}
+	}
+	if maxDescriptionWidth > 48 {
+		maxDescriptionWidth = 48
+	}
+
+	rowWidth := 4 + 1 + maxDescriptionWidth + 1 + 12 + 1 + 8
+
+	fmt.Println()
+	fmt.Println("TASK LIST")
+	fmt.Println(strings.Repeat("-", rowWidth))
+	fmt.Printf("%-4s %-*s %-12s %-8s\n", "ID", maxDescriptionWidth, "Description", "Status", "Priority")
+	fmt.Println(strings.Repeat("-", rowWidth))
+
+	for _, task := range visibleTasks {
+		description := task.Description
+		if len(description) > maxDescriptionWidth {
+			description = description[:maxDescriptionWidth-3] + "..."
+		}
+
+		fmt.Printf("%-4d %-*s %-12s %-8s\n", task.ID, maxDescriptionWidth, description, task.Status, task.Priority)
+	}
+
+	fmt.Println()
+	return nil
 }
 
 func UpdateTask(id int, newDescription string) error {
