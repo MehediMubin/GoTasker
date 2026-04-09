@@ -4,17 +4,27 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"path/filepath"
 )
 
-const taskFile = "tasks.json"
+var taskFilePath = mustTaskFilePath()
+
+func mustTaskFilePath() string {
+	configDir, err := os.UserConfigDir()
+	if err != nil {
+		log.Fatalf("Error resolving config directory: %v\n", err)
+	}
+
+	return filepath.Join(configDir, "task-cli", "tasks.json")
+}
 
 func LoadTasks() ([]Task, error) {
-	_, err := os.Stat(taskFile)
+	_, err := os.Stat(taskFilePath)
 	if err != nil && os.IsNotExist(err) {
 		return []Task{}, nil
 	}
 
-	data, err := os.ReadFile(taskFile)
+	data, err := os.ReadFile(taskFilePath)
 	if err != nil {
 		return nil, err
 	}
@@ -34,11 +44,16 @@ func SaveTasks(tasks []Task) error {
 		return err
 	}
 
-	err = os.WriteFile(taskFile, data, 0644)
+	err = os.MkdirAll(filepath.Dir(taskFilePath), 0755)
 	if err != nil {
 		return err
 	}
-	
+
+	err = os.WriteFile(taskFilePath, data, 0644)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
