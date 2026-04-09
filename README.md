@@ -81,11 +81,13 @@ task-cli mark-in-progress 2
 task-cli mark-done 2
 ```
 
-### 📄 List All Tasks
+### 📄 List Active Tasks
 
 ```bash
 task-cli list
 ```
+
+By default, `task-cli list` shows every task except those marked `done`.
 
 ### 🎯 List Tasks by Status
 
