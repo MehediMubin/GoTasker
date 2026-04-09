@@ -5,44 +5,70 @@ import (
 	"fmt"
 	"slices"
 	"sort"
+	"strings"
 	"time"
 )
 
+const (
+	defaultTaskStatus   = "todo"
+	defaultTaskPriority = "low"
+)
+
+var validPriorities = map[string]struct{}{
+	"high":   {},
+	"medium": {},
+	"low":    {},
+}
+
 type Task struct {
-	ID          int    		`json:"id"`
-	Description string 		`json:"description"`
-	Status      string 		`json:"status"`
+	ID          int       `json:"id"`
+	Description string    `json:"description"`
+	Status      string    `json:"status"`
 	Priority    string    `json:"priority"`
 	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt 	time.Time `json:"updatedAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
 var tasks []Task
 
-func AddTask(description string) error {
+func isValidPriority(priority string) bool {
+	_, ok := validPriorities[priority]
+	return ok
+}
+
+func normalizePriority(priority string) string {
+	return strings.ToLower(strings.TrimSpace(priority))
+}
+
+func AddTask(description string, priority string) error {
+	priority = normalizePriority(priority)
+	if !isValidPriority(priority) {
+		return errors.New("invalid priority: use high, medium, or low")
+	}
+
 	id := 1
 	if len(tasks) > 0 {
-		id = tasks[len(tasks) - 1].ID + 1
+		id = tasks[len(tasks)-1].ID + 1
 	}
 
 	newTask := Task{
-		ID: id,
+		ID:          id,
 		Description: description,
-		Status: "todo",
-		Priority: "low",
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		Status:      defaultTaskStatus,
+		Priority:    priority,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 
-	tasks = append(tasks, newTask) 
+	tasks = append(tasks, newTask)
 	return SaveTasks(tasks)
 }
 
 func ListTasks(status string) error {
 	priorityOrder := map[string]int{
-		"high": 0,
+		"high":   0,
 		"medium": 1,
-		"low": 2,
+		"low":    2,
 	}
 
 	sort.Slice(tasks, func(i, j int) bool {
@@ -76,7 +102,7 @@ func UpdateTask(id int, newDescription string) error {
 func DeleteTask(id int) error {
 	for i, task := range tasks {
 		if task.ID == id {
-			tasks = slices.Delete(tasks, i, i + 1)
+			tasks = slices.Delete(tasks, i, i+1)
 			return SaveTasks(tasks)
 		}
 	}
@@ -96,12 +122,17 @@ func MarkStatus(id int, status string) error {
 
 func Reset() error {
 	for i := range tasks {
-		tasks[i].Status = "todo"
+		tasks[i].Status = defaultTaskStatus
 	}
 	return SaveTasks(tasks)
 }
 
 func SetPriority(id int, newPriority string) error {
+	newPriority = normalizePriority(newPriority)
+	if !isValidPriority(newPriority) {
+		return errors.New("invalid priority: use high, medium, or low")
+	}
+
 	for i, task := range tasks {
 		if task.ID == id {
 			tasks[i].Priority = newPriority

@@ -8,6 +8,24 @@ import (
 	"strings"
 )
 
+func parseAddCommandArgs(args []string) (string, string, error) {
+	if len(args) < 3 {
+		return "", "", errors.New("usage: add <description> [priority]")
+	}
+
+	if len(args) > 4 {
+		return "", "", errors.New("usage: add <description> [priority]")
+	}
+
+	description := args[2]
+	priority := defaultTaskPriority
+	if len(args) == 4 {
+		priority = args[3]
+	}
+
+	return description, priority, nil
+}
+
 func RunCLI() error {
 	args := os.Args
 	if len(args) < 2 {
@@ -17,12 +35,12 @@ func RunCLI() error {
 	command := args[1]
 	switch command {
 	case "add":
-		if len(args) < 3 {
-			return errors.New("please provide a task description")
+		description, priority, err := parseAddCommandArgs(args)
+		if err != nil {
+			return err
 		}
-		
-		description := strings.Join(args[2:], " ")
-		err := AddTask(description)
+
+		err = AddTask(description, priority)
 		if err != nil {
 			return err
 		}
@@ -37,7 +55,7 @@ func RunCLI() error {
 		if err != nil {
 			return err
 		}
-	
+
 	case "update":
 		if len(args) < 4 {
 			return errors.New("usage: update <id> <new description>")
