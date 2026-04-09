@@ -76,7 +76,7 @@ func ListTasks(status string) error {
 	})
 	found := false
 	for _, task := range tasks {
-		if status == "" || task.Status == status {
+		if (status == "" && task.Status != "done") || task.Status == status {
 			fmt.Printf("%d - %s [%s] [%s]\n", task.ID, task.Description, task.Status, task.Priority)
 			found = true
 		}
@@ -84,6 +84,9 @@ func ListTasks(status string) error {
 	if found {
 		return nil
 	} else {
+		if status == "" {
+			return errors.New("no task available")
+		}
 		return errors.New("no task available with the status: " + status)
 	}
 }
