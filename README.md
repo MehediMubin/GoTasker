@@ -16,6 +16,7 @@ A simple command-line interface (CLI) tool to track and manage your daily tasks.
 - 📄 List all tasks
 - 🎯 List tasks by status (`todo`, `in-progress`, `done`)
 - 🔄 Reset all tasks to `todo` using the `reset` command
+- 🧹 Delete all tasks using the `clear` command
 - 🧭 List tasks sorted by priority (`high` → `medium` → `low`)
 - 🗂️ Stores task data in a local JSON file
 
@@ -101,6 +102,12 @@ task-cli list done
 
 ```bash
 task-cli reset
+```
+
+### 🧹 Delete All Tasks
+
+```bash
+task-cli clear
 ```
 
 ### 🧭 List Tasks by Priority Order (high → medium → low)
