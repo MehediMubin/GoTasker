@@ -131,6 +131,17 @@ func RunCLI() error {
 		}
 		fmt.Println("Task resetted successfully")
 
+	case "clear":
+		if len(args) != 2 {
+			return errors.New("usage: clear")
+		}
+
+		err := ClearTasks()
+		if err != nil {
+			return err
+		}
+		fmt.Println("All tasks deleted successfully")
+
 	case "priority-high":
 		if len(args) < 3 {
 			return errors.New("usage: priority-high <id>")

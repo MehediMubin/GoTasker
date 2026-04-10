@@ -159,6 +159,11 @@ func Reset() error {
 	return SaveTasks(tasks)
 }
 
+func ClearTasks() error {
+	tasks = []Task{}
+	return SaveTasks(tasks)
+}
+
 func SetPriority(id int, newPriority string) error {
 	newPriority = normalizePriority(newPriority)
 	if !isValidPriority(newPriority) {
