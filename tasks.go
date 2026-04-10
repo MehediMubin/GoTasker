@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 const (
@@ -89,10 +90,10 @@ func ListTasks(status string) error {
 		return priorityOrder[visibleTasks[i].Priority] < priorityOrder[visibleTasks[j].Priority]
 	})
 
-	maxDescriptionWidth := len("Description")
+	maxDescriptionWidth := utf8.RuneCountInString("Description")
 	for _, task := range visibleTasks {
-		if len(task.Description) > maxDescriptionWidth {
-			maxDescriptionWidth = len(task.Description)
+		if descriptionWidth := utf8.RuneCountInString(task.Description); descriptionWidth > maxDescriptionWidth {
+			maxDescriptionWidth = descriptionWidth
 		}
 	}
 	if maxDescriptionWidth > 48 {
@@ -108,16 +109,41 @@ func ListTasks(status string) error {
 	fmt.Println(strings.Repeat("-", rowWidth))
 
 	for _, task := range visibleTasks {
-		description := task.Description
-		if len(description) > maxDescriptionWidth {
-			description = description[:maxDescriptionWidth-3] + "..."
-		}
+		descriptionLines := wrapText(task.Description, maxDescriptionWidth)
+		for lineIndex, descriptionLine := range descriptionLines {
+			if lineIndex == 0 {
+				fmt.Printf("%-4d %-*s %-12s %-8s\n", task.ID, maxDescriptionWidth, descriptionLine, task.Status, task.Priority)
+				continue
+			}
 
-		fmt.Printf("%-4d %-*s %-12s %-8s\n", task.ID, maxDescriptionWidth, description, task.Status, task.Priority)
+			fmt.Printf("%-4s %-*s %-12s %-8s\n", "", maxDescriptionWidth, descriptionLine, "", "")
+		}
 	}
 
 	fmt.Println()
 	return nil
+}
+
+func wrapText(text string, width int) []string {
+	if width <= 0 {
+		return []string{text}
+	}
+
+	runes := []rune(text)
+	if len(runes) == 0 {
+		return []string{""}
+	}
+
+	lines := make([]string, 0, (len(runes)+width-1)/width)
+	for start := 0; start < len(runes); start += width {
+		end := start + width
+		if end > len(runes) {
+			end = len(runes)
+		}
+		lines = append(lines, string(runes[start:end]))
+	}
+
+	return lines
 }
 
 func UpdateTask(id int, newDescription string) error {
